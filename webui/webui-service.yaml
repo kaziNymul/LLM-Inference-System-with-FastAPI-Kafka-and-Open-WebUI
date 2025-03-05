@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-webui-service
+  namespace: open-webui
+spec:
+  type: NodePort  # Exposes the service on a port of every node.
+  selector:
+    app: open-webui
+  ports:
+    - protocol: TCP
+      port: 8080       # Internal port for the Service.
+      targetPort: 8080 # Port on which Open WebUI listens in the container.
+      nodePort: 30081  # External port you will use to access the web UI.
+

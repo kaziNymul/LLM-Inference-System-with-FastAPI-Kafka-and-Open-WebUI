@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-app
+  namespace: llm
+  labels:
+    app: fastapi-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-app
+  template:
+    metadata:
+      labels:
+        app: fastapi-app
+    spec:
+      containers:
+      - name: fastapi-app
+        image: mobikanu/fastapi-kafka:latest
+        ports:
+        - containerPort: 8000
+        env:
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: "kafka.kafka.svc.cluster.local:9092"
+          - name: LLM_ENDPOINT_1
+            value: "http://ollama-service.llm.svc.cluster.local:80/api/generate"
+          - name: LLM_ENDPOINT_2
+            value: "http://ollama-service.llm.svc.cluster.local:80/api/generate"
+

@@ -1,0 +1,85 @@
+apiVersion: ray.io/v1alpha1
+kind: RayCluster
+metadata:
+  name: llm-ray-cluster
+  namespace: ray
+spec:
+  rayVersion: "2.0.0"
+  headGroupSpec:
+    rayStartParams:
+      dashboard-host: "0.0.0.0"
+      port: "6379"
+      ray-client-server-port: "10001"
+    template:
+      spec:
+        nodeSelector:
+          node-role.kubernetes.io/worker: ""
+        containers:
+          # Ray Head Container
+          - name: ray-head
+            image: rayproject/ray:2.0.0
+            command:
+              - /bin/bash
+              - -c
+              - >
+                ray start --head --port=6379 --dashboard-host=0.0.0.0 --ray-client-server-port=10001;
+                sleep infinity
+            ports:
+              - containerPort: 6379
+              - containerPort: 8265
+              - containerPort: 10001
+            resources:
+              requests:
+                cpu: "250m"    # Reduced from 500m
+                memory: "2Gi"   # Reduced from 4Gi
+              limits:
+                cpu: "500m"    # Reduced from 1 CPU
+                memory: "2Gi"   # Reduced from 4Gi
+          # FastAPI Sidecar Container
+          - name: fastapi-app
+            image: mobikanu/fastapi:latest
+            command:
+              - /bin/bash
+              - -c
+              - >
+                uvicorn app:app --host 0.0.0.0 --port 8000
+            ports:
+              - containerPort: 8000
+            resources:
+              requests:
+                cpu: "250m"    # Reduced from 500m
+                memory: "128Mi" # Reduced from 512Mi
+              limits:
+                cpu: "500m"    # Reduced from 1 CPU
+                memory: "256Mi" # Reduced from 1Gi
+  workerGroupSpecs:
+    - groupName: worker-group-1
+      replicas: 2
+      rayStartParams:
+        address: "$(RAY_HEAD_SERVICE_HOST):6379"
+      template:
+        spec:
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Exists"
+              effect: "NoSchedule"
+          containers:
+            - name: ray-worker
+              image: rayproject/ray:2.0.0
+              command:
+                - /bin/bash
+                - -c
+                - >
+                  ray start --address=$(RAY_HEAD_SERVICE_HOST):6379;
+                  sleep infinity
+              env:
+                - name: RAY_HEAD_SERVICE_HOST
+                  value: "llm-ray-cluster-head-svc.ray.svc.cluster.local"
+              resources:
+                requests:
+                  cpu: "250m"    # Reduced from 500m
+                  memory: "2Gi"   # Reduced from 4Gi
+                limits:
+                  cpu: "500m"
+                  memory: "2Gi"
+

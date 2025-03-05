@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gradio-webui
+  namespace: llm
+  labels:
+    app: gradio-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gradio-webui
+  template:
+    metadata:
+      labels:
+        app: gradio-webui
+    spec:
+      containers:
+      - name: gradio-webui
+        image: mobikanu/gradio-webui:latest
+        ports:
+        - containerPort: 8501
+
