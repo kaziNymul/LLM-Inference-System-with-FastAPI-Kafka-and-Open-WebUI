@@ -103,5 +103,9 @@ kubectl exec -it kafka-<pod-name> -n kafka -- kafka-topics.sh --list --bootstrap
 kubectl logs -f open-webui-deployment-<pod-name> -n open-webui
 ```
 
+### 4. Flow Diagram
+![image](https://github.com/user-attachments/assets/1e142472-5976-4bb3-ab96-73dbc898e979)
+
+
 ## Conclusion
 This **LLM inference system** provides a **scalable, distributed, and efficient** way to handle **AI inference workloads** using **FastAPI, Kafka, Open WebUI, and KubeRay**. 
