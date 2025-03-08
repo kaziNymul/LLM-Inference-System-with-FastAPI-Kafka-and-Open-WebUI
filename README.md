@@ -126,7 +126,8 @@ kubectl logs -f open-webui-deployment-<pod-name> -n open-webui
 ```
 
 ### 4. Flow Diagram
-![diagram (1)](https://github.com/user-attachments/assets/bb57d30a-925f-4ca9-81a1-bc2eebef420f)
+![ds_diagram](https://github.com/user-attachments/assets/3b588fa3-16b5-4317-b3fd-9d9bf4e362b4)
+
 
 
 
