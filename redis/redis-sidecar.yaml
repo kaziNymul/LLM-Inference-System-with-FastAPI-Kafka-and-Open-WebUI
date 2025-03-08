@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deployment
+  namespace: llm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-app
+  template:
+    metadata:
+      labels:
+        app: fastapi-app
+    spec:
+      containers:
+      - name: fastapi-app
+        image: mobikanu/fastapi:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: REDIS_HOST
+          value: "localhost"  # Redis sidecar runs in the same pod
+        - name: REDIS_PORT
+          value: "6379"
+      - name: redis-sidecar
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+
