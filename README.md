@@ -87,6 +87,22 @@ kubectl apply -f kuberay-deployment.yaml
 ```
 This will **distribute a single prompt** across multiple pods for faster inference.
 
+# Performance Monitoring
+
+This setup enhances an **LLM inference system** using FastAPI, Kafka, Open WebUI, and multiple LLM pods. We incorporate **performance monitoring** and **scalability features** using Redis, Grafana, Locust, LitmusChaos, and KubeRay.
+
+## 📌 Key Features
+
+| Feature            | Tool Used                   | Outcome                                      |
+|-------------------|---------------------------|----------------------------------------------|
+| **FastAPI Caching** | Redis Sidecar               | Reduces redundant LLM calls                 |
+| **Redis Monitoring** | Redis Exporter + Grafana    | Tracks cache hit/miss ratio                  |
+| **Load Testing**   | Locust                      | Ensures FastAPI scalability                 |
+| **Chaos Testing**  | LitmusChaos                 | Ensures resilience                           |
+| **Dynamic Scaling** | KubeRay                     | Distributes LLM loads                        |
+
+
+
 ## Debugging
 ### 1. Check if LLM Pods are Running
 ```sh
