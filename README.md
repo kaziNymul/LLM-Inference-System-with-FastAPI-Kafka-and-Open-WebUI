@@ -101,6 +101,12 @@ This setup enhances an **LLM inference system** using FastAPI, Kafka, Open WebUI
 | **Chaos Testing**  | LitmusChaos                 | Ensures resilience                           |
 | **Dynamic Scaling** | KubeRay                     | Distributes LLM loads                        |
 
+- **FastAPI Caching** → Reduces redundant requests using Redis.
+- **Redis Monitoring** → Tracks cache hit/miss ratio using Grafana dashboards.
+- **Load Testing** → Locust simulates concurrent users & measures FastAPI performance.
+- **Chaos Testing** → LitmusChaos injects failures to test system resilience.
+- **Dynamic Scaling** → KubeRay distributes LLM requests across multiple pods.
+
 
 
 ## Debugging
